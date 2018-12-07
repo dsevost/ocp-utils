@@ -1,0 +1,18 @@
+- kind: LDAPPasswordIdentityProvider
+  name: __IDM_NAME__
+  login: 'true'
+  challenge: 'true'
+  attributes:
+    email:
+    - mail
+    id:
+    - dn
+    name:
+    - cn
+    preferredUsername:
+    - uid
+  bindDN: uid=ocp-proxy,cn=users,cn=accounts,__DC__
+  bindPassword: __IDM_BIND_PASSWORD__
+  ca: /etc/origin/master/IDM_CA.crt
+  insecure: 'false'
+  url: ldap://__IDM_HOST__/__DC__?uid?sub?(memberOf=cn=ocp-users,cn=groups,cn=accounts,__DC__)

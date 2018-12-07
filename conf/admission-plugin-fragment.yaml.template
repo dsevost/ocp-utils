@@ -1,0 +1,19 @@
+PodNodeConstraints:
+  configuration:
+    apiVersion: v1
+    kind: PodNodeConstraintsConfig
+ProjectRequestLimit:
+  configuration:
+    apiVersion: v1
+    kind: ProjectRequestLimitConfig
+    limits:
+    - selector:
+        admin: 'true'
+    - selector:
+        level: restricted
+        maxProjects: '1'
+    - selector:
+        level: trusted
+        maxProjects: '50'
+    - maxProjects: '5'
+
