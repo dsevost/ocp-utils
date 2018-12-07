@@ -1,4 +1,8 @@
 assets
-hosts
-conf/json
 env.sh
+hosts
+bin/manage-ssl.sh
+conf/json
+**/*.crt
+**/*.key
+**/*.pem

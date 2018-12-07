@@ -5,8 +5,8 @@ TMPL_NAME=${OPENSHIFT_INVENTORY_TEMPLATE_FILE:-"ocp-hosts-v311.template"}
 CUTOMER_TLD=${CUSTOMER_TLD}
 INTERNAL_NET=${INTERNAL_NET}
 
-OCP_DOMAIN=${OCP_DOMAIN:-"ocpdomain"}
-APPS_DOMAIN=${APPS_DOMAIN:-"appsdomain"}
+OCP_DOMAIN=${OCP_DOMAIN:-"ocp"}
+APPS_DOMAIN=${APPS_DOMAIN:-"apps"}
 IDM_NAME=${IDM_NAME:-"RH-IDM01"}
 IDM_BIND_USER=${IDM_BIND_USER:-"ocp-proxy"}
 IDM_BIND_PASSWORD=${IDM_BIND_PASSWORD:-"ocp-proxy-password"}
@@ -37,8 +37,9 @@ BASE_DIR=$HOME
 CUR_DIR=${ASSETS_PREFIX:-$(pwd)}
 
 ASSETS=${CUR_DIR}/assets
+CA_ASSETS=$ASSETS/ca/$ROOT_CA
 
-[ -d "$ASSETS" ] || mkdir -p $ASSETS
+[ -d "$CA_ASSETS" ] || mkdir -p $CA_ASSETS
 
 for f in $TMPL_NAME {admission-plugin,idm,project-request}-fragment.yaml.template ; do
 sed "
@@ -61,3 +62,6 @@ sed "
 done
 
 ln -sf ${ASSETS}/$(echo $TMPL_NAME | sed 's/\.template//') ${CUR_DIR}/hosts
+
+export CA_ROOT=${CA_ASSETS} OCSP_HOSTNAME=${IDM_HOST}
+cat $DIR/openssl-fragment.cfg.template | envsubst | sed 's/__DOLLAR__/$/g' > ${CA_ASSETS}/openssl-${ROOT_CA}.cnf
