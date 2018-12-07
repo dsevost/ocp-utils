@@ -41,14 +41,14 @@ ansible_user=root
 
 #openshift_storage_glusterfs_is_native=False
 #openshift_storage_glusterfs_heketi_is_native=True
-# native heketi управляет сервисами Gluster как 
-# 'kubernetes' при развертывании на узлах OpenShift и 'ssh' для внешних узлов
+#native heketi управляет сервисами Gluster как 
+#'kubernetes' при развертывании на узлах OpenShift и 'ssh' для внешних узлов
 #openshift_storage_glusterfs_heketi_executor=ssh
 #openshift_storage_glusterfs_heketi_ssh_user=root
 #openshift_storage_glusterfs_heketi_ssh_sudo=true
 #openshift_storage_glusterfs_heketi_ssh_keyfile=/root/id_rsa
 
-# Тип развертывания 
+# Тип развертывания
 openshift_deployment_type=openshift-enterprise
 
 # Домен по умолчанию, в котором будут создаваться имена маршрутов
@@ -76,9 +76,7 @@ openshift_crio_enable_docker_gc=true
 # Все строки в формате JSON должны быть слиты в одну
 
 # Интеграция с каталогом пользователей на базе LDAP
-#openshift_master_identity_providers=[{ 'name': '__IDM_NAME__', 'challenge': 'true', 'login': 'true', 'kind': 'LDAPPasswordIdentityProvider', 'attributes': { 'id': ['dn'], 'email': ['mail'], 'name': ['cn'], 'preferredUsername': ['uid']}, 'bindDN': 'uid=ocp-proxy,cn=users,cn=accounts,__DC__', 'bindPassword': '__IDM_BIND_PASSWORD__', 'ca': '/etc/origin/master/IDM_CA.crt', 'insecure': 'false', 'url':'ldap://__IDM_HOST__/__DC__?uid?sub?(memberOf=cn=ocp-users,cn=groups,cn=accounts,__DC__)'}]
 openshift_master_identity_providers={{ lookup("file", "/root/idm-fragment.yaml") | from_yaml }}
-
 openshift_master_ldap_ca_file=/root/IDM_CA.crt
 
 # Сетевой плагин 
@@ -87,7 +85,6 @@ os_sdn_network_plugin_name=redhat/openshift-ovs-multitenant
 #openshift_portal_net=10.68.0.0/16
 #openshift_master_external_ip_network_cidrs=['10.69.0.0/16', '10.70.0.0/16']
 #openshift_master_ingress_ip_network_cidr=10.71.0.0/16
-
 
 #  Именованный сертификат для публичной точки доступа к Кластеру OpenShift
 openshift_master_named_certificates=[{ 'certfile': '/root/console.ocp.customer.tld.crt.pem', 'keyfile': '/root/console.ocp.customer.tld.key.pem', 'names': ['console.ocp.customer.tld'], 'cafile': '/root/ROOT_CA.crt' }]
@@ -180,8 +177,6 @@ openshift_metrics_heapster_nodeselector={ 'node-role.kubernetes.io/infra': 'true
 # Set node selector for prometheus
 openshift_prometheus_node_selector={ 'node-role.kubernetes.io/infra': 'true' }
 
-#
-#openshift_master_admission_plugin_config={ 'ProjectRequestLimit': { 'configuration': { 'apiVersion': 'v1', 'kind': 'ProjectRequestLimitConfig', 'limits': [{ 'selector': { 'admin': 'true' }}, { 'maxProjects': '1' }] }}, 'PodNodeConstraints': { 'configuration': { 'apiVersion': 'v1', 'kind': 'PodNodeConstraintsConfig' } }}
 openshift_master_admission_plugin_config={{ lookup("file", "/root/admission-plugin-fragment.yaml") | from_yaml }}
 
 # Шаблон настроек проектов
@@ -190,4 +185,3 @@ openshift_project_request_template_manage=true
 #openshift_project_request_template_name=project-request
 osm_project_request_template=default/project-request
 openshift_project_request_template_edits={{ lookup("file", "project-request-fragment.yaml") | from_yaml }}
-#openshift_project_request_template_edits=[{ 'key': 'objects', 'action': 'append', 'value': { 'apiVersion': 'v1', 'kind': 'ResourceQuota', 'metadata': { 'annotations': { 'openshift.io/quota-tier': 'DefaultQuote' }, 'labels': { 'quota-tier': 'DefaultQuote' }, 'name': 'quota' }, 'spec': { 'hard': { 'cpu': '2', 'memory': '12Gi' }, 'scopes': [ 'NotTerminating' ]} }}, { 'key': 'objects', 'action': 'append', 'value': { 'apiVersion': 'v1', 'kind': 'ResourceQuota', 'metadata': { 'annotations': { 'openshift.io/quota-tier': 'DefaultQuote' }, 'labels': { 'quota-tier': 'DefaultQuote' }, 'name': 'burst-quota' }, 'spec': { 'hard': { 'cpu': '4', 'memory': '16Gi'}} }}, { 'key': 'objects', 'action': 'append', 'value': { 'apiVersion': 'v1', 'kind': 'LimitRange', 'metadata': { 'annotations': { 'openshift.io/quota-tier': 'DefaultQuote' }, 'labels': { 'quota-tier': 'DefaultQuote', 'name': 'limits' }}, 'spec': { 'limits': [{'max': { 'cpu': '200m', 'memory': '2Gi' }, 'min': { 'cpu': '10m', 'memory': '128Mi' }, 'type': 'Pod' }, { 'default': { 'cpu': '50m', 'memory': '256Mi' }, 'max': { 'cpu': '200m', 'memory': '2Gi' }, 'min': { 'cpu': '20m', 'memory': '256Mi' }, 'type': 'Container' }]}}}]

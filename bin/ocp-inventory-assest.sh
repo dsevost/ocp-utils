@@ -59,7 +59,7 @@ sed "
   s/__IDM_HOST__/$IDM_HOST/g ;
   s/__PRIVATE_DOCKER_REGISTRY_HOST__/$PRIVATE_DOCKER_REGISTRY_HOST/g ;
   s|/root/|${ASSETS}/|g ;
-#  s/^# .*[^=].*// ;
+  /^# .*[^=].*/d ;
 " $DIR/$f > ${ASSETS}/$(echo $f | sed 's/\.template//')
 done
 
