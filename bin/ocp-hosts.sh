@@ -34,7 +34,7 @@ TMPL_NAME=$(basename $TMPL_NAME)
 
 BASE_DIR=$HOME
 
-CUR_DIR=$(pwd)
+CUR_DIR=${ASSETS_PREFIX:-$(pwd)}
 
 ASSETS=${CUR_DIR}/assets
 
@@ -55,7 +55,8 @@ sed "
   s/__IDM_HOST__/$IDM_HOST/g ;
   s/ROOT_CA\.crt/$CA_CERT/g ;
   s/__PRIVATE_DOCKER_REGISTRY_HOST__/$PRIVATE_DOCKER_REGISTRY_HOST/g ;
-  s|/root/|${HOME}/assets/|g ;
+  s|/root/|${ASSETS}/|g ;
+#  s/^# .*[^=].*// ;
 " $DIR/$f > ${ASSETS}/$(echo $f | sed 's/\.template//')
 done
 
