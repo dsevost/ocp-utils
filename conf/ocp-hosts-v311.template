@@ -67,10 +67,10 @@ openshift_master_ldap_ca_file=/root/IDM_CA.crt
 os_sdn_network_plugin_name=redhat/openshift-ovs-multitenant
 
 #  Именованный сертификат для публичной точки доступа к Кластеру OpenShift
-openshift_master_named_certificates=[{ 'certfile': '/root/console.ocp.customer.tld.crt', 'keyfile': '/root/console.ocp.customer.tld.key', 'names': ['console.ocp.customer.tld'], 'cafile': '/root/ROOT_CA.crt' }]
+openshift_master_named_certificates=[{ 'certfile': '/root/console.ocp.customer.tld.crt.pem', 'keyfile': '/root/console.ocp.customer.tld.key.pem', 'names': ['console.ocp.customer.tld'], 'cafile': '/root/ROOT_CA.crt' }]
 
 # Именованный сертификат для сервиса маршрутизации
-openshift_hosted_router_certificate={ 'certfile': '/root/apps.ocp.customer.tld.crt', 'keyfile': '/root/apps.ocp.customer.tld.key', 'cafile': '/root/ROOT_CA.crt' }
+openshift_hosted_router_certificate={ 'certfile': '/root/apps.ocp.customer.tld.crt.pem', 'keyfile': '/root/apps.ocp.customer.tld.key.pem', 'cafile': '/root/ROOT_CA.crt' }
 
 # Публичный ключ корневого Центра Сертификации,
 # который будет добавлен к Кластеру OpenShift 

@@ -14,14 +14,14 @@ CUR_DIR=${ASSETS_PREFIX:-$(pwd)}
 ASSETS=${CUR_DIR}/assets
 CA_ASSETS=$ASSETS/ca
 
-if [ -r "${CA_ASSETS}/${CN}.key.pem" ] ; then
+if [ -r "${ASSETS}/${CN}.key.pem" ] ; then
     #echo \
     openssl req \
 	-config ${CA_ASSETS}/$CA/openssl-${CA}.cnf \
 	-new \
 	-nodes \
 	-sha512 \
-	-key ${CA_ASSETS}/"${CN}".key.pem \
+	-key ${ASSETS}/"${CN}".key.pem \
 	-out ${CA_ASSETS}/"${CN}".csr.pem \
 	-subj "${DN}"
     echo "OLD KEY FOUND: just renew CSR"
@@ -34,7 +34,7 @@ else
 	-out ${CA_ASSETS}/"${CN}".csr.pem \
 	-sha512 \
 	-newkey ${KEY_TYPE} \
-	-keyout ${CA_ASSETS}/"${CN}".key.pem \
+	-keyout ${ASSETS}/"${CN}".key.pem \
 	-subj "${DN}"
 fi
 

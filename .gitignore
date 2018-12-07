@@ -1,4 +1,4 @@
-assets
+assets*
 env.sh
 hosts
 bin/manage-ssl.sh

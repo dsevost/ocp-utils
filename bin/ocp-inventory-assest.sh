@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 TMPL_NAME=${OPENSHIFT_INVENTORY_TEMPLATE_FILE:-"ocp-hosts-v311.template"}
 
 CUTOMER_TLD=${CUSTOMER_TLD}
@@ -47,14 +49,14 @@ sed "
   s/apps\./${APPS_DOMAIN}./g ;
   s/\.internal\.net/.$INTERNAL_NET/g ;
   s/\.customer\.tld/.$CUSTOMER_TLD/g ;
+  s/ROOT_CA\.crt/$CA_CERT/g ;
   s/__IDM_NAME__/$IDM_NAME/g ;
   s/__IDM_BIND_PASSWORD__/$IDM_BIND_PASSWORD/g ;
+  s/IDM_CA\.crt/$IDM_CA_CERT/g ;
   s/ocp-proxy/$IDM_BIND_USER/g ;
   s/ocp-users/$IDM_GROUP/g ;
   s/__DC__/$IDM_DC/g ;
-  s/IDM_CA\.crt/$IDM_CA_CERT/g ;
   s/__IDM_HOST__/$IDM_HOST/g ;
-  s/ROOT_CA\.crt/$CA_CERT/g ;
   s/__PRIVATE_DOCKER_REGISTRY_HOST__/$PRIVATE_DOCKER_REGISTRY_HOST/g ;
   s|/root/|${ASSETS}/|g ;
 #  s/^# .*[^=].*// ;
