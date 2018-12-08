@@ -184,4 +184,4 @@ openshift_project_request_template_manage=true
 #openshift_project_request_template_namespace=default
 #openshift_project_request_template_name=project-request
 osm_project_request_template=default/project-request
-openshift_project_request_template_edits={{ lookup("file", "project-request-fragment.yaml") | from_yaml }}
+openshift_project_request_template_edits={{ lookup("file", "/root/project-request-fragment.yaml") | from_yaml }}
