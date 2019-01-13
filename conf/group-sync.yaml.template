@@ -1,0 +1,30 @@
+kind: LDAPSyncConfig
+apiVersion: v1
+url: ldap://__IDM_HOST__
+insecure: false
+bindDN: uid=ocp-proxy,cn=users,cn=accounts,__DC__
+bindPassword: __IDM_BIND_PASSWORD__
+ca: /etc/origin/master/IDM_CA.crt
+#groupUIDNameMapping:
+#  "cn=ocp-admins,cn=groups,cn=accounts,__DC__": administrators
+#activeDirectory:
+rfc2307:
+  groupsQuery:
+    baseDN: "cn=groups,cn=accounts,__DC__"
+    scope: sub
+    derefAliases: never
+    pageSize: 0
+    filter: (&(objectClass=groupofnames)(cn=ocp-*)(!cn=*users*))
+  groupUIDAttribute: cn
+  groupNameAttributes: [ cn ]
+  groupMembershipAttributes: [ member ]
+  usersQuery:
+    baseDN: "cn=users,cn=accounts,__DC__"
+    scope: sub
+    derefAliases: never
+    pageSize: 0
+#    filter: (objectclass=inetorgperson)
+  userUIDAttribute: dn
+  userNameAttributes: [ uid ]
+  tolerateMemberNotFoundErrors: false
+  tolerateMemberOutOfScopeErrors: false

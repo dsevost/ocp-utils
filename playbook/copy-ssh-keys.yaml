@@ -1,0 +1,21 @@
+- hosts: "{{ r_hosts }}"
+  gather_facts: no
+  vars:
+    r_user: "{{ user_remote }}"
+    l_user: "{{ user_local }}"
+  tasks:
+#  - fail: msg="Variable 'user_remote' must be  defined"
+#    when:
+#    - r_user is not defined
+  - block:
+    - set_fact:
+        ssh_pub_key: "/home/{{ l_user }}/.ssh/id_rsa.pub"
+#    - debug: var=ssh_pub_key
+  - name: Set authorized key took from file
+    authorized_key:
+      user: "{{ r_user }}"
+      state: present
+      key: "{{ lookup('file', ssh_pub_key) }}"
+    when:
+    - r_user is defined
+    - l_user is defined

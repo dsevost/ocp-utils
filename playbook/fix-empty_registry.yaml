@@ -1,0 +1,11 @@
+- hosts: "{{ r_hosts }}"
+  gather_facts: no
+#  vars:
+#    r_user: "{{ user_remote }}"
+#    l_user: "{{ user_local }}"
+  tasks:
+  - name: Fixing empty string at registry list definition
+    copy:
+      src: registries.conf
+      dest: /etc/containers
+

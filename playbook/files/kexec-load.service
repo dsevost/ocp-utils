@@ -1,0 +1,13 @@
+[Unit]
+Description=load $(uname -r) kernel into the current kernel
+Documentation=https://wiki.archlinux.org/index.php/Kexec
+DefaultDependencies=no
+Before=shutdown.target umount.target final.target kexec.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c '/sbin/kexec -l /boot/vmlinuz-$(/bin/uname -r) --initrd=/boot/initramfs-$(/bin/uname -r).img --reuse-cmdline'
+RemainAfterExit=yes
+
+[Install]
+WantedBy=kexec.target

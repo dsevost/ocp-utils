@@ -1,0 +1,15 @@
+- hosts: "{{ r_hosts }}"
+  gather_facts: no
+  tasks:
+  - name: Copy systemd Kexec load unit (fast reboot)
+    copy:
+      src: kexec-load.service
+      dest: /etc/systemd/system
+  - name: Reload SystemD
+    systemd:
+      daemon-reload: yes
+  - name: Start and Enable Kexec service
+    systemd:
+      service: kexec-load
+      enabled: yes
+      state: started

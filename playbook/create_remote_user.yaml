@@ -1,0 +1,27 @@
+- hosts: "{{ r_hosts }}"
+  gather_facts: no
+  vars:
+    r_user: "{{ user_remote }}"
+    l_user: "{{ user_local }}"
+    ocp_install_group: "ocpinstall"
+  tasks:
+  - block:
+    - name: Create OCP install group {{ ocp_install_group }}"
+      group:
+        name: "{{ ocp_install_group }}"
+        state: present
+    - name: "Allow {{ ocp_install_group }} group to have passwordless sudo"
+      lineinfile:
+        dest: /etc/sudoers
+        state: present
+        regexp: "^#%{{ ocp_install_group }}        ALL=(ALL)       NOPASSWD: ALL"
+        line: "%{{ ocp_install_group }}        ALL=(ALL)       NOPASSWD: ALL"
+        validate: 'visudo -cf %s'
+    - name: Create Install user
+      user:
+        name: "{{ r_user }}"
+        groups: "{{ ocp_install_group }}"
+        state: present
+    when:
+    - r_user is defined
+    - l_user is defined

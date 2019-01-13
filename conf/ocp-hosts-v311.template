@@ -7,9 +7,9 @@ master[1:3].ocp.internal.net
 master[1:3].ocp.internal.net
 
 [nodes]
-master[1:3].ocp.internal.net openshift_node_group_name=node-config-master
-infra[1:3].ocp.internal.net openshift_node_group_name=node-config-infra
-node[1:3].ocp.internal.net openshift_node_group_name=node-config-compute
+master[1:3].ocp.internal.net openshift_node_group_name=node-config-master-crio
+infra[1:3].ocp.internal.net openshift_node_group_name=node-config-infra-crio
+node[1:3].ocp.internal.net openshift_node_group_name=node-config-compute-crio
 
 [nfs]
 nfs.ocp.internal.net
@@ -59,7 +59,7 @@ openshift_master_default_subdomain=apps.ocp.customer.tld
 openshift_master_cluster_hostname=lb.ocp.internal.net
 
 # Публичная точка входа в Кластер OpenShift 
-openshift_master_cluster_hostname=console.ocp.customer.tld
+openshift_master_cluster_public_hostname=console.ocp.customer.tld
 
 # Для неподдерживаемых компонентов,
 # например, реестр образов на NFS-сервере
@@ -81,10 +81,10 @@ openshift_master_ldap_ca_file=/root/IDM_CA.crt
 
 # Сетевой плагин 
 os_sdn_network_plugin_name=redhat/openshift-ovs-multitenant
-#osm_cluster_network_cidr=10.64.0.0/14
-#openshift_portal_net=10.68.0.0/16
-#openshift_master_external_ip_network_cidrs=['10.69.0.0/16', '10.70.0.0/16']
-#openshift_master_ingress_ip_network_cidr=10.71.0.0/16
+#osm_cluster_network_cidr=100.64.0.0/14
+#openshift_portal_net=100.68.0.0/16
+#openshift_master_external_ip_network_cidrs=['100.69.0.0/16', '100.70.0.0/16']
+#openshift_master_ingress_ip_network_cidr=100.71.0.0/16
 
 #  Именованный сертификат для публичной точки доступа к Кластеру OpenShift
 openshift_master_named_certificates=[{ 'certfile': '/root/console.ocp.customer.tld.crt.pem', 'keyfile': '/root/console.ocp.customer.tld.key.pem', 'names': ['console.ocp.customer.tld'], 'cafile': '/root/ROOT_CA.crt' }]

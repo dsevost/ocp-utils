@@ -1,0 +1,66 @@
+- hosts: "{{ r_hosts }}"
+  gather_facts: no
+  vars:
+    r_device: "{{ device }}"
+    r_vg: "{{ vg_name }}"
+    r_lv: "{{ lv_name }}"
+    r_size: "{{ lv_size }}"
+    r_mount_point: "{{ mount_point }}"
+  tasks:
+  - block:
+    - set_fact:
+        r_part: "{{ r_device }}p1"
+        lv_dev: "/dev/{{ r_vg }}/{{ r_lv }}"
+    - name: "Umount fstab entry fo mount point for {{ r_part }} at {{ r_mount_point }}/{{ r_lv }}"
+      mount:
+        src: "{{ lv_dev }}"
+        fstype: xfs
+        path: "{{ r_mount_point }}/{{ r_lv }}"
+        state: unmounted
+      ignore_errors: true
+    - name: "Partitioning device {{ r_device }}"
+      parted:
+        device: "{{ r_device }}"
+        label: gpt
+        number: 1
+        state: present
+    - name: "Create VG {{ r_vg }} at {{ r_part }}"
+      lvg:
+        pvs: "{{ r_part }}"
+        vg: "{{ r_vg }}"
+        state: present
+      when: 
+    - name: "Create LV {{ r_lv }} at {{ r_vg }}"
+      lvol:
+        vg: "{{ r_vg }}"
+        lv: "{{ r_lv }}"
+        size: "{{ r_size }}"
+    - name: "Creating an XFS filesystem on device {{ lv_dev }}"
+      filesystem:
+        dev: "{{ lv_dev }}"
+        fstype: xfs
+    - name: "Creating mount point for {{ lv_dev }} at {{ r_mount_point }}/{{ r_lv }}"
+      file:
+        path: "{{ r_mount_point }}/{{ r_lv }}"
+        setype: container_file_t
+        state: directory
+    - name: "Setup SELinux context for new mount point {{ r_mount_point }}/{{ r_lv }}"
+      sefcontext:
+        target: "{{ r_mount_point }}(/.*)?"
+        setype: container_file_t
+        state: present
+    - name: "Creating fstab entry fo mount point for {{ lv_dev }} at {{ r_mount_point }}/{{ r_lv }}"
+      mount:
+        src: "{{ lv_dev }}"
+        fstype: xfs
+        path: "{{ r_mount_point }}/{{ r_lv }}"
+        state: present
+    - name: "Restore SELinux context on directory {{ r_mount_point }}/{{ r_lv }}"
+      shell: |
+        /usr/sbin/restorecon -R {{ r_mount_point }}/{{ r_lv }}
+    when:
+    - r_device is defined
+    - r_mount_point is defined
+    - r_vg is defined
+    - r_lv is defined
+    - r_size is defined

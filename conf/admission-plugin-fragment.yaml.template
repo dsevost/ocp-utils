@@ -16,4 +16,3 @@ ProjectRequestLimit:
         level: trusted
         maxProjects: '50'
     - maxProjects: '5'
-
