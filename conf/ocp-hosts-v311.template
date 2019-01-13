@@ -44,28 +44,28 @@ ansible_user=ocp
 #ansible_user=root
 #ansible_become=yes
 
-openshift_storage_glusterfs_is_native=false
-openshift_storage_glusterfs_heketi_is_native=true
-openshift_storage_glusterfs_namespace=glusterfs-apps
-openshift_storage_glusterfs_name=apps
-openshift_storage_glusterfs_registry_heketi_is_native=true
-openshift_storage_glusterfs_registry_namespace=glusterfs-infra
-openshift_storage_glusterfs_registry_name=infra
-openshift_storage_glusterfs_wipe=true
+#openshift_storage_glusterfs_is_native=false
+#openshift_storage_glusterfs_heketi_is_native=true
+#openshift_storage_glusterfs_namespace=glusterfs-apps
+#openshift_storage_glusterfs_name=apps
+#openshift_storage_glusterfs_registry_heketi_is_native=true
+#openshift_storage_glusterfs_registry_namespace=glusterfs-infra
+#openshift_storage_glusterfs_registry_name=infra
+#openshift_storage_glusterfs_wipe=true
 # https://bugzilla.redhat.com/show_bug.cgi?id=1630117
 # and allow 24010/tcp and 3260/tcp
 # also allow all glusterfs-service ports
-openshift_storage_glusterfs_block_storageclass=true
-openshift_storage_glusterfs_registry_storageclass=true
-openshift_storage_glusterfs_registry_block_storageclass=true
-#native heketi управляет сервисами Gluster как
-#'kubernetes' при развертывании на узлах OpenShift и 'ssh' для внешних узлов
-#openshift_storage_glusterfs_heketi_url=/
-#openshift_storage_glusterfs_registry_heketi_url=/
-openshift_storage_glusterfs_heketi_executor=ssh
-openshift_storage_glusterfs_heketi_ssh_user=heketi
-openshift_storage_glusterfs_heketi_ssh_sudo=true
-openshift_storage_glusterfs_heketi_ssh_keyfile=/root/.ssh/id_rsa-heketi
+#openshift_storage_glusterfs_block_storageclass=true
+#openshift_storage_glusterfs_registry_storageclass=true
+#openshift_storage_glusterfs_registry_block_storageclass=true
+# native heketi управляет сервисами Gluster как
+# 'kubernetes' при развертывании на узлах OpenShift и 'ssh' для внешних узлов
+##openshift_storage_glusterfs_heketi_url=/
+##openshift_storage_glusterfs_registry_heketi_url=/
+#openshift_storage_glusterfs_heketi_executor=ssh
+#openshift_storage_glusterfs_heketi_ssh_user=heketi
+#openshift_storage_glusterfs_heketi_ssh_sudo=true
+#openshift_storage_glusterfs_heketi_ssh_keyfile=/root/.ssh/id_rsa-heketi
 
 # Тип развертывания
 openshift_deployment_type=openshift-enterprise
@@ -118,6 +118,8 @@ openshift_additional_ca=/root/ROOT_CA.crt
 # Настройка реестров базовых образов
 #oreg_url=__PRIVATE_DOCKER_REGISTRY_HOST__/openshift3/ose-${component}:${version}
 #osm_etcd_image=__PRIVATE_DOCKER_REGISTRY_HOST__/rhe7/etcd:3.2.22
+#openshift_storage_glusterfs_heketi_image=__PRIVATE_DOCKER_REGISTRY_HOST__/rhgs3/rhgs-volmanager-rhel7:latest
+#openshift_storage_glusterfs_block_image=__PRIVATE_DOCKER_REGISTRY_HOST__/rhgs3/rhgs-gluster-block-prov-rhel7:latest
 #openshift_examples_modify_imagestreams=true
 #openshift_docker_blocked_registries=docker.io,registry.access.redhat.com,registry.redhat.io
 # необходимо запретить проверку доступности образов,
@@ -149,6 +151,17 @@ openshift_logging_install_logging=true
 #openshift_logging_storage_volume_size=10Gi
 #openshift_logging_storage_labels={'storage': 'logging'}
 #openshift_logging_elasticsearch_pvc_storage_class_name=local-storage
+#openshift_logging_elasticsearch_pvc_dynamic=true
+#openshift_logging_es_pvc_dynamic=true
+#openshift_logging_storage_volume_size=50Gi
+#openshift_logging_es_cluster_size=3
+##openshift_logging_es_number_of_replicas=2
+##openshift_logging_es_number_of_shards=3
+##openshift_logging_storage_labels={'storage': 'logging'}
+#openshift_logging_elasticsearch_pvc_storage_class_name=local-elastic
+#openshift_logging_es_pvc_storage_class_name=local-elastic
+# установить количество реплик в 0 для того, чтобы указать в DC nodeSelector
+#openshift_logging_elasticsearch_replica_count=0
 # Развертывать компоненты агрегатора только на инфраструктурных узлах
 openshift_logging_curator_nodeselector={ 'node-role.kubernetes.io/infra': 'true' }
 openshift_logging_kibana_nodeselector={ 'node-role.kubernetes.io/infra': 'true' }
@@ -164,6 +177,7 @@ openshift_logging_es_memory_limit=1G
 openshift_metrics_install_metrics=true
 # подключение NFS-тома с управляемого NFS-сервера к агератору логов
 #openshift_metrics_storage_kind=nfs
+#openshift_metrics_cassandra_storage_type=dynamic
 #openshift_metrics_storage_access_modes=['ReadWriteOnce']
 #openshift_metrics_storage_nfs_directory=/var/export
 #openshift_metrics_storage_nfs_options=*(rw,root_squash)
@@ -171,6 +185,8 @@ openshift_metrics_install_metrics=true
 #openshift_metrics_storage_volume_size=10Gi
 #openshift_metrics_storage_labels={'storage': 'metrics'}
 #openshift_metrics_cassandra_pvc_storage_class_name=monitoring-storage
+##openshift_metrics_cassandra_pvc_storage_class_name=glusterfs-infra
+##openshift_metrics_cassandra_pvc_storage_class_name=glusterfs-registry-block
 # Развертывать компоненты сбора метрик только 
 # на инфраструктурных узлах
 openshift_metrics_hawkular_nodeselector={ 'node-role.kubernetes.io/infra': 'true' }
@@ -183,8 +199,8 @@ openshift_metrics_heapster_nodeselector={ 'node-role.kubernetes.io/infra': 'true
 # для 3.10 необходимо указать переменную установки
 # openshift_metrics_install_metrics=true
 
-#openshift_prometheus_storage_type=pvc
 #openshift_prometheus_storage_kind=nfs
+#openshift_prometheus_storage_type=pvc
 #openshift_prometheus_storage_access_modes=['ReadWriteOnes']
 #openshift_prometheus_storage_nfs_directory="/var/export"
 #openshift_prometheus_storage_nfs_options=*(rw,root_squash)
@@ -192,6 +208,8 @@ openshift_metrics_heapster_nodeselector={ 'node-role.kubernetes.io/infra': 'true
 #openshift_prometheus_storage_volume_size=10Gi
 #openshift_cluster_monitoring_operator_prometheus_storage_class_name=monitoring-storage
 #openshift_cluster_monitoring_operator_alertmanager_storage_class_name=monitoring-storage
+##openshift_cluster_monitoring_operator_prometheus_storage_class_name=glusterfs-registry-block
+##openshift_cluster_monitoring_operator_alertmanager_storage_class_name=glusterfs-registry-block
 
 # Set node selector for prometheus
 openshift_prometheus_node_selector={ 'node-role.kubernetes.io/infra': 'true' }
