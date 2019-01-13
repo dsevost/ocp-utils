@@ -5,22 +5,24 @@ set -e
 TMPL_NAME=${OPENSHIFT_INVENTORY_TEMPLATE_FILE:-"ocp-hosts-v311.template"}
 
 CUTOMER_TLD=${CUSTOMER_TLD}
-INTERNAL_NET=${INTERNAL_NET}
+INTERNAL_DOMAIN=${INTERNAL_DOMAIN:-"$CUSTOMER_TLD"}
 
 OCP_DOMAIN=${OCP_DOMAIN:-"ocp"}
 APPS_DOMAIN=${APPS_DOMAIN:-"apps"}
+SDN_DOMAIN=${SDN_DOMAIN:-"$INTERNAL_DOMAIN"}
+GLUSTER_DOMAIN=${GLUSTER_DOMAIN:-"$INTERNAL_DOMAIN"}
 IDM_NAME=${IDM_NAME:-"RH-IDM01"}
 IDM_BIND_USER=${IDM_BIND_USER:-"ocp-proxy"}
 IDM_BIND_PASSWORD=${IDM_BIND_PASSWORD:-"ocp-proxy-password"}
 IDM_GROUP=${IDM_GROUP:-"ocp-access"}
 IDM_CA_CERT=${IDM_CA_CERT:-"ipa-ca.crt"}
 IDM_DC=${IDM_DC}
-IDM_HOST=${IDM_HOST:-"idm01.$INTERNAL_NET"}
+IDM_HOST=${IDM_HOST:-"idm01.$INTERNAL_DOMAIN"}
 
 # downlaod CA form IPA server curl -o ipa-ca.crt http://ipa.example.com/ipa/config/ca.crt
 CA_CERT=${CA_CERT:-"ipa-ca.crt"}
 
-PRIVATE_DOCKER_REGISTRY_HOST=${PRIVATE_DOCKER_REGISTRY_HOST:-"satellite.$INTERNAL_NET"}
+PRIVATE_DOCKER_REGISTRY_HOST=${PRIVATE_DOCKER_REGISTRY_HOST:-"satellite.$INTERNAL_DOMAIN"}
 
 function die() {
     echo $*
@@ -28,7 +30,7 @@ function die() {
 }
 
 [ -z "$CUSTOMER_TLD" ] && die "CUSTOMER_TLD must be set to public domain"
-[ -z "$INTERNAL_NET" ] && die "INTERNAL_NET must be set to internal domain"
+[ -z "$INTERNAL_DOMAIN" ] && die "INTERNAL_DOMAIN must be set to internal domain"
 [ -z "$IDM_DC" ] && die "IDM_DC must be set"
 
 DIR=$(dirname $TMPL_NAME)
@@ -47,7 +49,9 @@ for f in $TMPL_NAME {admission-plugin,idm,project-request}-fragment.yaml.templat
 sed "
   s/\.ocp\./.${OCP_DOMAIN}./g ;
   s/apps\./${APPS_DOMAIN}./g ;
-  s/\.internal\.net/.$INTERNAL_NET/g ;
+  s/gluster\./${GLUSTER_DOMAIN}./g ;
+  s/sdn\./${SDN_DOMAIN}./g ;
+  s/\.internal\.net/.$INTERNAL_DOMAIN/g ;
   s/\.customer\.tld/.$CUSTOMER_TLD/g ;
   s/ROOT_CA\.crt/$CA_CERT/g ;
   s/__IDM_NAME__/$IDM_NAME/g ;

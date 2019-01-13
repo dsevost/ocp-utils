@@ -5,6 +5,7 @@ master[1:3].ocp.internal.net
 
 [etcd]
 master[1:3].ocp.internal.net
+#master1.ocp.internal.net openshift_ip=172.27.0.11 openshift_hostname=master1.sdn.internal.net
 
 [nodes]
 master[1:3].ocp.internal.net openshift_node_group_name=node-config-master-crio
@@ -18,11 +19,14 @@ nfs.ocp.internal.net
 lb.ocp.internal.net
 
 #[glusterfs]
-##node1.ocp.internal.net glusterfs_ip='172.23.0.10' glusterfs_devices='[ "/dev/sdb", "/dev/sdc", "/dev/sdd" ]'
+##node1.ocp.internal.net glusterfs_ip='172.27.0.101' glusterfs_devices='[ "/dev/sdb", "/dev/sdc", "/dev/sdd" ]'
+##node1.ocp.internal.net glusterfs_ip='172.27.0.101' glusterfs_hostname=node1.gluster.internal.net glusterfs_devices='[ "/dev/sda1", "/dev/sdb1" ]'
 #node[1:3].ocp.internal.net glusterfs_devices='[ "/dev/sdb", "/dev/sdc", "/dev/sdd" ]'
 
+
 #[glusterfs_registry]
-##infra1.ocp.internal.net glusterfs_ip='172.23.0.21' glusterfs_devices='[ "/dev/sdb", "/dev/sdc", "/dev/sdd" ]'
+##infra1.ocp.internal.net glusterfs_ip='172.27.0.21' glusterfs_devices='[ "/dev/sdb", "/dev/sdc", "/dev/sdd" ]'
+##infra1.ocp.internal.net glusterfs_ip='172.27.0.21' glusterfs_hostname=infra1.gluster.internal.net glusterfs_devices='[ "/dev/sda1", "/dev/sdb1" ]'
 #infra[1:3].ocp.internal.net glusterfs_devices='[ "/dev/sdb", "/dev/sdc", "/dev/sdd" ]'
 
 # Create an OSEv3 group that contains the masters and nodes groups
@@ -36,17 +40,32 @@ nfs
 #glusterfs_registry
 
 [OSEv3:vars]
-ansible_user=root
+ansible_user=ocp
+#ansible_user=root
 #ansible_become=yes
 
-#openshift_storage_glusterfs_is_native=False
-#openshift_storage_glusterfs_heketi_is_native=True
-#native heketi управляет сервисами Gluster как 
+openshift_storage_glusterfs_is_native=false
+openshift_storage_glusterfs_heketi_is_native=true
+openshift_storage_glusterfs_namespace=glusterfs-apps
+openshift_storage_glusterfs_name=apps
+openshift_storage_glusterfs_registry_heketi_is_native=true
+openshift_storage_glusterfs_registry_namespace=glusterfs-infra
+openshift_storage_glusterfs_registry_name=infra
+openshift_storage_glusterfs_wipe=true
+# https://bugzilla.redhat.com/show_bug.cgi?id=1630117
+# and allow 24010/tcp and 3260/tcp
+# also allow all glusterfs-service ports
+openshift_storage_glusterfs_block_storageclass=true
+openshift_storage_glusterfs_registry_storageclass=true
+openshift_storage_glusterfs_registry_block_storageclass=true
+#native heketi управляет сервисами Gluster как
 #'kubernetes' при развертывании на узлах OpenShift и 'ssh' для внешних узлов
-#openshift_storage_glusterfs_heketi_executor=ssh
-#openshift_storage_glusterfs_heketi_ssh_user=root
-#openshift_storage_glusterfs_heketi_ssh_sudo=true
-#openshift_storage_glusterfs_heketi_ssh_keyfile=/root/id_rsa
+#openshift_storage_glusterfs_heketi_url=/
+#openshift_storage_glusterfs_registry_heketi_url=/
+openshift_storage_glusterfs_heketi_executor=ssh
+openshift_storage_glusterfs_heketi_ssh_user=heketi
+openshift_storage_glusterfs_heketi_ssh_sudo=true
+openshift_storage_glusterfs_heketi_ssh_keyfile=/root/.ssh/id_rsa-heketi
 
 # Тип развертывания
 openshift_deployment_type=openshift-enterprise
@@ -81,10 +100,10 @@ openshift_master_ldap_ca_file=/root/IDM_CA.crt
 
 # Сетевой плагин 
 os_sdn_network_plugin_name=redhat/openshift-ovs-multitenant
-#osm_cluster_network_cidr=100.64.0.0/14
-#openshift_portal_net=100.68.0.0/16
-#openshift_master_external_ip_network_cidrs=['100.69.0.0/16', '100.70.0.0/16']
-#openshift_master_ingress_ip_network_cidr=100.71.0.0/16
+osm_cluster_network_cidr=100.64.0.0/14
+openshift_portal_net=100.68.0.0/16
+openshift_master_external_ip_network_cidrs=['100.69.0.0/16', '100.70.0.0/16']
+openshift_master_ingress_ip_network_cidr=100.71.0.0/16
 
 #  Именованный сертификат для публичной точки доступа к Кластеру OpenShift
 openshift_master_named_certificates=[{ 'certfile': '/root/console.ocp.customer.tld.crt.pem', 'keyfile': '/root/console.ocp.customer.tld.key.pem', 'names': ['console.ocp.customer.tld'], 'cafile': '/root/ROOT_CA.crt' }]
