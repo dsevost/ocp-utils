@@ -6,7 +6,7 @@ CN=${1:-"openshift-default-router"}
 #DN=${DN:-"/C=RU/ST=Moscow/L=Moscow/O=Red Hat B.V. CIS/OU=Solution Architecture/mail=cis-sa@redhat.ru/CN=$CN"}
 DN_PREFIX=${DN_PREFIX:-"/C=RU/ST=Moscow/L=Moscow/O=Red Hat B.V. CIS/OU=Solution Architecture/mail=cis-sa@redhat.ru"}
 DN=${DN:-"$DN_PREFIX/CN=$CN"}
-CA=${CA:-$ROOT_CA}
+CA=${CA:-"$ROOT_CA"}
 KEY_TYPE=${KEY_TYPE:-"rsa:2048"}
 
 shift
