@@ -1,0 +1,38 @@
+#
+openshift_logging_install_logging: false
+
+#openshift_logging_storage_kind: "nfs"
+#openshift_logging_storage_access_modes: [ "ReadWriteOnce" ]
+#openshift_logging_storage_nfs_directory: "/var/export"
+#openshift_logging_storage_nfs_options: "*(rw,root_squash)"
+#openshift_logging_storage_volume_name: "logging"
+#openshift_logging_storage_volume_size: "10G"
+
+#openshift_logging_es_pvc_dynamic: true
+#openshift_logging_es_pvc_size: "48G"
+
+#openshift_logging_storage_labels: { "storage": "logging", "kind": "primary" }
+#openshift_logging_es_pvc_storage_class_name: "local-elastic"
+
+openshift_logging_es_cluster_size: "3"
+#openshift_logging_es_number_of_replicas: "1"
+##openshift_logging_es_number_of_shards: "3"
+## установить количество реплик в 0 для того, чтобы указать в DC nodeSelector
+##openshift_logging_elasticsearch_replica_count: "0"
+
+openshift_logging_es_memory_limit: "8G"
+
+#openshift_logging_kibana_ca: "/root/ROOT_CA.crt"
+#openshift_logging_kibana_cert: "/root/kibana.ocp.customer.tld.crt.pem"
+#openshift_logging_kibana_key: "/root/kibana.ocp.customer.tld.crt.pem"
+#openshift_logging_kibana_hostname: "kibana.ocp.customer.tld"
+
+openshift_logging_curator_nodeselector={ "node-role.kubernetes.io/infra": "true" }
+openshift_logging_kibana_nodeselector={ "node-role.kubernetes.io/infra": "true" }
+openshift_logging_es_nodeselector={ "node-role.kubernetes.io/infra": "true" }
+
+#openshift_logging_use_ops: true
+#openshift_logging_es_ops_memory_limit: "2G"
+#openshift_logging_es_ops_nodeselector: { "node-role.kubernetes.io/infra": "true" }
+#openshift_logging_kibana_ops_nodeselector: { "node-role.kubernetes.io/infra": "true" }
+#openshift_logging_curator_ops_nodeselector: { "node-role.kubernetes.io/infra": "true" }

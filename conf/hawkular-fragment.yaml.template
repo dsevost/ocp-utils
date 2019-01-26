@@ -1,0 +1,29 @@
+#
+
+openshift_metrics_install_metrics: false
+#openshift_hosted_metrics_deploy: true
+
+openshift_metrics_cassandra_replicas: "3"
+openshift_metrics_cassandra_limits_memory: "2G"
+openshift_metrics_cassandra_requests_memory: "1G"
+
+openshift_metrics_storage_volume_size: "10Gi"
+#openshift_metrics_storage_labels: { "storage": "metrics", "component": "cassandra" }
+
+#openshift_metrics_storage_kind: "nfs"
+#openshift_metrics_storage_access_modes: [ "ReadWriteOnce" ]
+#openshift_metrics_storage_nfs_directory: "/var/export"
+#openshift_metrics_storage_nfs_options: "*(rw,root_squash)"
+#openshift_metrics_storage_volume_name: "cassandra"
+
+#openshift_metrics_cassandra_storage_type: "pv"
+#openshift_metrics_cassandra_pvc_storage_class_name: "local-infra"
+
+openshift_metrics_hawkular_nodeselector: { "node-role.kubernetes.io/infra": "true" }
+openshift_metrics_cassandra_nodeselector: { "node-role.kubernetes.io/infra": "true" }
+openshift_metrics_heapster_nodeselector: { "node-role.kubernetes.io/infra": "true" }
+
+#openshift_metrics_hawkular_ca: "/root/ROOT_CA.crt"
+#openshift_metrics_hawkular_cert: "/root/hawkular.ocp.customer.tld.crt.pem"
+#openshift_metrics_hawkular_key: "/root/hawkular.ocp.customer.tld.crt.pem"
+#openshift_metrics_hawkular_hostname: "hawkular.ocp.customer.tld"

@@ -1,0 +1,26 @@
+#
+openshift_storage_glusterfs_is_native: false
+openshift_storage_glusterfs_heketi_is_native: true
+openshift_storage_glusterfs_namespace: "glusterfs-apps"
+openshift_storage_glusterfs_name: "apps"
+openshift_storage_glusterfs_registry_heketi_is_native: true
+openshift_storage_glusterfs_registry_namespace: "glusterfs-infra"
+openshift_storage_glusterfs_registry_name: "infra"
+#openshift_storage_glusterfs_wipe: true
+openshift_storage_glusterfs_block_storageclass: true
+openshift_storage_glusterfs_registry_storageclass: true
+openshift_storage_glusterfs_registry_block_storageclass: true
+#native heketi управляет сервисами Gluster как
+#'kubernetes' при развертывании на узлах OpenShift и 'ssh' для внешних узлов
+#openshift_storage_glusterfs_heketi_url: "/"
+#openshift_storage_glusterfs_registry_heketi_url: "/"
+openshift_storage_glusterfs_heketi_executor: "ssh"
+openshift_storage_glusterfs_heketi_ssh_user: "heketi"
+openshift_storage_glusterfs_heketi_ssh_sudo: true
+openshift_storage_glusterfs_heketi_ssh_keyfile: "/home/ocp/.ssh/id_rsa-heketi"
+
+openshift_storage_glusterfs_s3_deploy: false
+openshift_storage_glusterfs_s3_account: "file"
+openshift_storage_glusterfs_s3_user: "admin"
+openshift_storage_glusterfs_s3_password: "password123"
+openshift_storage_glusterfs_s3_pvc_size: "10G"

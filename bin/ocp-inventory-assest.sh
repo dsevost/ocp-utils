@@ -45,7 +45,10 @@ CA_ASSETS=$ASSETS/ca/$ROOT_CA
 
 [ -d "$CA_ASSETS" ] || mkdir -p $CA_ASSETS
 
-for f in $TMPL_NAME {admission-plugin,idm,project-request}-fragment.yaml.template ; do
+for f in $TMPL_NAME \
+    {admission-plugin,idm,project-request}-fragment.yaml.template \
+    {gluster,hawkular,logging,prometheus}-fragment.yaml.template 
+do
 sed "
   s/\.ocp\./.${OCP_DOMAIN}./g ;
   s/apps\./${APPS_DOMAIN}./g ;
@@ -66,6 +69,10 @@ sed "
   /^# .*[^=].*/d ;
 " $DIR/$f > ${ASSETS}/$(echo $f | sed 's/\.template//')
 done
+
+#for f in {gluster,hawkular,logging,prometheus}-inline.yaml.template ; do
+#    cat $DIR/$f >> ${ASSETS}/$(echo $TMPL_NAME | sed 's/\.template//')
+#done
 
 ln -sf ${ASSETS}/$(echo $TMPL_NAME | sed 's/\.template//') ${CUR_DIR}/hosts
 

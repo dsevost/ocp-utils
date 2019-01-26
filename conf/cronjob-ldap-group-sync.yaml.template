@@ -28,24 +28,24 @@ objects:
         "${LDAP_GROUP_NAME4}": "${OCP_GROUP_NAME4}"
         "${LDAP_GROUP_NAME5}": "${OCP_GROUP_NAME5}"
       rfc2307:
-          groupsQuery:
-              baseDN: ${LDAP_GROUPS_SEARCH_BASE}
-              scope: sub
-              derefAliases: never
-              filter: ${LDAP_GROUPS_FILTER}
-              pageSize: 0
-          groupUIDAttribute: cn
-          groupNameAttributes: [ cn ]
-          groupMembershipAttributes: [ member ]
-          usersQuery:
-              baseDN: ${LDAP_USERS_SEARCH_BASE}
-              scope: sub
-              derefAliases: never
-              pageSize: 0
-          userUIDAttribute: dn
-          userNameAttributes: [ uid ]
-          tolerateMemberNotFoundErrors: true
-          tolerateMemberOutOfScopeErrors: true
+        groupsQuery:
+          baseDN: ${LDAP_GROUPS_SEARCH_BASE}
+          scope: sub
+          derefAliases: never
+          filter: ${LDAP_GROUPS_FILTER}
+          pageSize: 0
+        groupUIDAttribute: cn
+        groupNameAttributes: [ cn ]
+        groupMembershipAttributes: [ member ]
+        usersQuery:
+          baseDN: ${LDAP_USERS_SEARCH_BASE}
+          scope: sub
+          derefAliases: never
+          pageSize: 0
+        userUIDAttribute: dn
+        userNameAttributes: [ uid ]
+        tolerateMemberNotFoundErrors: true
+        tolerateMemberOutOfScopeErrors: true
 - kind: "CronJob"
   apiVersion: "batch/v1beta1"
   metadata:

@@ -8,12 +8,13 @@ master[1:3].ocp.internal.net
 #master1.ocp.internal.net openshift_ip=172.27.0.11 openshift_hostname=master1.sdn.internal.net
 
 [nodes]
+# 
 master[1:3].ocp.internal.net openshift_node_group_name=node-config-master-crio
 infra[1:3].ocp.internal.net openshift_node_group_name=node-config-infra-crio
 node[1:3].ocp.internal.net openshift_node_group_name=node-config-compute-crio
 
 [nfs]
-nfs.ocp.internal.net
+#nfs.ocp.internal.net
 
 [lb]
 lb.ocp.internal.net
@@ -40,38 +41,17 @@ nfs
 #glusterfs_registry
 
 [OSEv3:vars]
-ansible_user=ocp
-#ansible_user=root
+#ansible_user=ocp
+ansible_user=root
 #ansible_become=yes
-
-#openshift_storage_glusterfs_is_native=false
-#openshift_storage_glusterfs_heketi_is_native=true
-#openshift_storage_glusterfs_namespace=glusterfs-apps
-#openshift_storage_glusterfs_name=apps
-#openshift_storage_glusterfs_registry_heketi_is_native=true
-#openshift_storage_glusterfs_registry_namespace=glusterfs-infra
-#openshift_storage_glusterfs_registry_name=infra
-#openshift_storage_glusterfs_wipe=true
-# https://bugzilla.redhat.com/show_bug.cgi?id=1630117
-# and allow 24010/tcp and 3260/tcp
-# also allow all glusterfs-service ports
-#openshift_storage_glusterfs_block_storageclass=true
-#openshift_storage_glusterfs_registry_storageclass=true
-#openshift_storage_glusterfs_registry_block_storageclass=true
-# native heketi управляет сервисами Gluster как
-# 'kubernetes' при развертывании на узлах OpenShift и 'ssh' для внешних узлов
-##openshift_storage_glusterfs_heketi_url=/
-##openshift_storage_glusterfs_registry_heketi_url=/
-#openshift_storage_glusterfs_heketi_executor=ssh
-#openshift_storage_glusterfs_heketi_ssh_user=heketi
-#openshift_storage_glusterfs_heketi_ssh_sudo=true
-#openshift_storage_glusterfs_heketi_ssh_keyfile=/root/.ssh/id_rsa-heketi
 
 # Тип развертывания
 openshift_deployment_type=openshift-enterprise
 
 # Домен по умолчанию, в котором будут создаваться имена маршрутов
 openshift_master_default_subdomain=apps.ocp.customer.tld
+
+#osm_default_node_selector='node-compute-type=dev'
 
 # Точка входа в Кластер OpenShift (для компонентов Платформы,
 # находится в частной сети на Рисуноке
@@ -92,13 +72,11 @@ openshift_use_crio=true
 openshift_use_crio_only=false
 openshift_crio_enable_docker_gc=true
 
-# Все строки в формате JSON должны быть слиты в одну
-
 # Интеграция с каталогом пользователей на базе LDAP
 openshift_master_identity_providers={{ lookup("file", "/root/idm-fragment.yaml") | from_yaml }}
 openshift_master_ldap_ca_file=/root/IDM_CA.crt
 
-# Сетевой плагин 
+# Сетевой плагин
 os_sdn_network_plugin_name=redhat/openshift-ovs-multitenant
 osm_cluster_network_cidr=100.64.0.0/14
 openshift_portal_net=100.68.0.0/16
@@ -117,104 +95,35 @@ openshift_additional_ca=/root/ROOT_CA.crt
 
 # Настройка реестров базовых образов
 #oreg_url=__PRIVATE_DOCKER_REGISTRY_HOST__/openshift3/ose-${component}:${version}
-#osm_etcd_image=__PRIVATE_DOCKER_REGISTRY_HOST__/rhe7/etcd:3.2.22
+#osm_etcd_image=__PRIVATE_DOCKER_REGISTRY_HOST__/rhel7/etcd:3.2.22
 #openshift_storage_glusterfs_heketi_image=__PRIVATE_DOCKER_REGISTRY_HOST__/rhgs3/rhgs-volmanager-rhel7:latest
 #openshift_storage_glusterfs_block_image=__PRIVATE_DOCKER_REGISTRY_HOST__/rhgs3/rhgs-gluster-block-prov-rhel7:latest
+#openshift_storage_glusterfs_s3_image=__PRIVATE_DOCKER_REGISTRY_HOST__/rhgs3/rhgs-server-rhel7
 #openshift_examples_modify_imagestreams=true
 #openshift_docker_blocked_registries=docker.io,registry.access.redhat.com,registry.redhat.io
-# необходимо запретить проверку доступности образов,
-# так как инсталлятор не может корректно это сделать в данный момент
+# бывает необходимо запретить проверку доступности образов,
+# так как инсталлятор не может корректно это сделать
 #openshift_disable_check=docker_image_availability
 # в случае установки OpenShift 3.11 и реестра базовых образов,
 # находящихся в redhat.io, следует указать логин/пароль
 # для доступа к нему
 
+#openshift_hosted_registry_storage_kind=glusterfs
+#openshift_hosted_registry_storage_volume_size=256G
 # Подключение NFS-тома с управляемого NFS-сервера
 # ко встроенному реестру образов
-#openshift_hosted_registry_storage_kind=glusterfs
 #openshift_hosted_registry_storage_kind=nfs
 #openshift_hosted_registry_storage_access_modes=['ReadWriteMany']
 #openshift_hosted_registry_storage_nfs_directory=/var/export
 #openshift_hosted_registry_storage_nfs_options=*(rw,root_squash)
 #openshift_hosted_registry_storage_volume_name=registry
-#openshift_hosted_registry_storage_volume_size=10Gi
-
-# Установить агрегатор логов
-openshift_logging_install_logging=true
-# подключение NFS-тома с управляемого NFS-сервера к агератору логов
-#openshift_logging_storage_kind=nfs
-#openshift_logging_storage_access_modes=['ReadWriteOnce']
-#openshift_logging_storage_nfs_directory=/var/export
-#openshift_logging_ops_storage_nfs_directory=/var/export
-#openshift_logging_storage_nfs_options=*(rw,root_squash)
-#openshift_logging_storage_volume_name=logging
-#openshift_logging_storage_volume_size=10Gi
-#openshift_logging_storage_labels={'storage': 'logging'}
-#openshift_logging_elasticsearch_pvc_storage_class_name=local-storage
-#openshift_logging_elasticsearch_pvc_dynamic=true
-#openshift_logging_es_pvc_dynamic=true
-#openshift_logging_storage_volume_size=50Gi
-#openshift_logging_es_cluster_size=3
-##openshift_logging_es_number_of_replicas=2
-##openshift_logging_es_number_of_shards=3
-##openshift_logging_storage_labels={'storage': 'logging'}
-#openshift_logging_elasticsearch_pvc_storage_class_name=local-elastic
-#openshift_logging_es_pvc_storage_class_name=local-elastic
-# установить количество реплик в 0 для того, чтобы указать в DC nodeSelector
-#openshift_logging_elasticsearch_replica_count=0
-# Развертывать компоненты агрегатора только на инфраструктурных узлах
-openshift_logging_curator_nodeselector={ 'node-role.kubernetes.io/infra': 'true' }
-openshift_logging_kibana_nodeselector={ 'node-role.kubernetes.io/infra': 'true' }
-openshift_logging_es_nodeselector={ 'node-role.kubernetes.io/infra': 'true' }
-openshift_logging_es_memory_limit=1G
-#openshift_logging_es_ops_nodeselector={ 'node-role.kubernetes.io/infra': 'true' }
-#openshift_logging_es_ops_memory_limit=1G
-#openshift_logging_kibana_ops_nodeselector={ 'node-role.kubernetes.io/infra': 'true' }
-#openshift_logging_curator_ops_nodeselector={ 'node-role.kubernetes.io/infra': 'true' }
-
-# Установить сбор метрик
-#openshift_hosted_metrics_deploy=true
-openshift_metrics_install_metrics=true
-# подключение NFS-тома с управляемого NFS-сервера к агератору логов
-#openshift_metrics_storage_kind=nfs
-#openshift_metrics_cassandra_storage_type=dynamic
-#openshift_metrics_storage_access_modes=['ReadWriteOnce']
-#openshift_metrics_storage_nfs_directory=/var/export
-#openshift_metrics_storage_nfs_options=*(rw,root_squash)
-#openshift_metrics_storage_volume_name=cassandra
-#openshift_metrics_storage_volume_size=10Gi
-#openshift_metrics_storage_labels={'storage': 'metrics'}
-#openshift_metrics_cassandra_pvc_storage_class_name=monitoring-storage
-##openshift_metrics_cassandra_pvc_storage_class_name=glusterfs-infra
-##openshift_metrics_cassandra_pvc_storage_class_name=glusterfs-registry-block
-# Развертывать компоненты сбора метрик только 
-# на инфраструктурных узлах
-openshift_metrics_hawkular_nodeselector={ 'node-role.kubernetes.io/infra': 'true' }
-openshift_metrics_cassandra_nodeselector={ 'node-role.kubernetes.io/infra': 'true' }
-openshift_metrics_heapster_nodeselector={ 'node-role.kubernetes.io/infra': 'true' }
-
-# Установить подсистему мониторинга, использовать выделение СХД типа PVC
-# для версии 3.11 Prometheus развертывается автоматически
-#  (openshift_prometheus_state=present)
-# для 3.10 необходимо указать переменную установки
-# openshift_metrics_install_metrics=true
-
-#openshift_prometheus_storage_kind=nfs
-#openshift_prometheus_storage_type=pvc
-#openshift_prometheus_storage_access_modes=['ReadWriteOnes']
-#openshift_prometheus_storage_nfs_directory="/var/export"
-#openshift_prometheus_storage_nfs_options=*(rw,root_squash)
-#openshift_prometheus_storage_volume_name=prometheus
-#openshift_prometheus_storage_volume_size=10Gi
-#openshift_cluster_monitoring_operator_prometheus_storage_class_name=monitoring-storage
-#openshift_cluster_monitoring_operator_alertmanager_storage_class_name=monitoring-storage
-##openshift_cluster_monitoring_operator_prometheus_storage_class_name=glusterfs-registry-block
-##openshift_cluster_monitoring_operator_alertmanager_storage_class_name=glusterfs-registry-block
-
-# Set node selector for prometheus
-openshift_prometheus_node_selector={ 'node-role.kubernetes.io/infra': 'true' }
 
 openshift_master_admission_plugin_config={{ lookup("file", "/root/admission-plugin-fragment.yaml") | from_yaml }}
+
+# Настройки аудита обращений к OpenShift API
+# https://www.outcoldsolutions.com/docs/monitoring-openshift/v4/audit/
+# openshift_master_audit_config={ "enabled": true, "auditFilePath": "/var/lib/origin/audit/ocp-audit.log", "maximumFileRetentionDays": 14, "maximumFileSizeMegabytes": 500, "maximumRetainedFiles": 5, "policyFile": "/etc/security/adv-audit.yaml", "logFormat": "json" }
+#openshift_master_audit_config={ "enabled": true, "auditFilePath": "/var/lib/origin/audit/ocp-audit.log", "maximumFileRetentionDays": 14, "maximumFileSizeMegabytes": 100, "maximumRetainedFiles": 5 }
 
 # Шаблон настроек проектов
 openshift_project_request_template_manage=true
@@ -222,3 +131,15 @@ openshift_project_request_template_manage=true
 #openshift_project_request_template_name=project-request
 osm_project_request_template=default/project-request
 openshift_project_request_template_edits={{ lookup("file", "/root/project-request-fragment.yaml") | from_yaml }}
+
+# Конфигурация развертывания Gluster
+#{{ lookup("file", "/root/gluster-fragment.yaml") | from_yaml }}
+
+# Конфигурация развертывания EFK
+#{{ lookup("file", "/root/logging-fragment.yaml") | from_yaml }}
+
+# Конфигурация развертывания Hawkular
+#{{ lookup("file", "/root/hawkular-fragment.yaml") | from_yaml }}
+
+# Конфигурация развертывания Prometheus
+#{{ lookup("file", "/root/prometheus-fragment.yaml") | from_yaml }}

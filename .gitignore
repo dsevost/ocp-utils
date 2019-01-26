@@ -1,8 +1,10 @@
 assets*
 env.sh
+env.sh-*
 hosts
 bin/manage-ssl.sh
 conf/json
+conf/old
 openshift
 **/*.crt
 **/*.key
