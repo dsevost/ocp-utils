@@ -13,8 +13,38 @@
       hard:
         cpu: '2'
         memory: 12Gi
+        limits.ephemeral-storage: "0"
+        persistentvolumeclaims: "3"
+        requests.storage: "5Gi"
+        gold.storageclass.storage.k8s.io/requests.storage: "0"
+        silver.storageclass.storage.k8s.io/requests.storage: "1Gi"
+        silver.storageclass.storage.k8s.io/persistentvolumeclaims: "3"
+        bronze.storageclass.storage.k8s.io/requests.storage: "2Gi"
+        bronze.storageclass.storage.k8s.io/persistentvolumeclaims: "3"
+        pods: "20"
+        services: "5"
+        secrets: "30"
+        configmaps: "10"
+#        replicationcontrollers: "20"
       scopes:
       - NotTerminating
+- action: append
+  key: objects
+  value:
+    apiVersion: v1
+    kind: ResourceQuota
+    metadata:
+      annotations:
+        openshift.io/quota-tier: DefaultQuote
+      labels:
+        quota-tier: DefaultQuote
+      name: quota
+    spec:
+      hard:
+        cpu: "2"
+        memory: 12Gi
+      scopes:
+      - Terminating
 - action: append
   key: objects
   value:
@@ -28,7 +58,7 @@
       name: burst-quota
     spec:
       hard:
-        cpu: '4'
+        cpu: "4"
         memory: 16Gi
 - action: append
   key: objects
@@ -44,20 +74,19 @@
     spec:
       limits:
       - max:
-          cpu: 200m
+          cpu: 500m
           memory: 2Gi
         min:
           cpu: 10m
           memory: 128Mi
         type: Pod
       - default:
-          cpu: 50m
+          cpu: 100m
           memory: 256Mi
         max:
-          cpu: 200m
+          cpu: 300m
           memory: 2Gi
         min:
           cpu: 20m
           memory: 256Mi
         type: Container
-

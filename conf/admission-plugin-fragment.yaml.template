@@ -8,11 +8,11 @@ ProjectRequestLimit:
     kind: ProjectRequestLimitConfig
     limits:
     - selector:
-        admin: 'true'
+        admin: "true"
     - selector:
         level: restricted
-        maxProjects: '1'
+        maxProjects: "1"
     - selector:
         level: trusted
-        maxProjects: '50'
-    - maxProjects: '5'
+        maxProjects: "50"
+    - maxProjects: "5"
