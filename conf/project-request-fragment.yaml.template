@@ -21,6 +21,8 @@
         silver.storageclass.storage.k8s.io/persistentvolumeclaims: "3"
         bronze.storageclass.storage.k8s.io/requests.storage: "2Gi"
         bronze.storageclass.storage.k8s.io/persistentvolumeclaims: "3"
+        bronze.storageclass.storage.k8s.io/requests.storage: "5Gi"
+        bronze.storageclass.storage.k8s.io/persistentvolumeclaims: "3"
         pods: "20"
         services: "5"
         secrets: "30"
