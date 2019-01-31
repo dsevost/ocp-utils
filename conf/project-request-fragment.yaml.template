@@ -71,8 +71,8 @@
       annotations:
         openshift.io/quota-tier: DefaultQuote
       labels:
-        name: limits
         quota-tier: DefaultQuote
+      name: limits
     spec:
       limits:
       - max:
