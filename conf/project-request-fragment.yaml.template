@@ -5,29 +5,15 @@
     kind: ResourceQuota
     metadata:
       annotations:
+        description: Long Running Processe Quota
         openshift.io/quota-tier: DefaultQuote
       labels:
         quota-tier: DefaultQuote
-      name: quota
+      name: long-running
     spec:
       hard:
-        cpu: '2'
+        cpu: "2"
         memory: 12Gi
-        limits.ephemeral-storage: "0"
-        persistentvolumeclaims: "3"
-        requests.storage: "5Gi"
-        gold.storageclass.storage.k8s.io/requests.storage: "0"
-        silver.storageclass.storage.k8s.io/requests.storage: "1Gi"
-        silver.storageclass.storage.k8s.io/persistentvolumeclaims: "3"
-        bronze.storageclass.storage.k8s.io/requests.storage: "2Gi"
-        bronze.storageclass.storage.k8s.io/persistentvolumeclaims: "3"
-        bronze.storageclass.storage.k8s.io/requests.storage: "5Gi"
-        bronze.storageclass.storage.k8s.io/persistentvolumeclaims: "3"
-        pods: "20"
-        services: "5"
-        secrets: "30"
-        configmaps: "10"
-#        replicationcontrollers: "20"
       scopes:
       - NotTerminating
 - action: append
@@ -37,10 +23,11 @@
     kind: ResourceQuota
     metadata:
       annotations:
+        description: Time Bound Process Quota
         openshift.io/quota-tier: DefaultQuote
       labels:
         quota-tier: DefaultQuote
-      name: quota
+      name: time-bound
     spec:
       hard:
         cpu: "2"
@@ -57,11 +44,19 @@
         openshift.io/quota-tier: DefaultQuote
       labels:
         quota-tier: DefaultQuote
-      name: burst-quota
+      name: objects-count
     spec:
       hard:
-        cpu: "4"
-        memory: 16Gi
+        bronze.storageclass.storage.k8s.io/persistentvolumeclaims: "3"
+        bronze.storageclass.storage.k8s.io/requests.storage: 2Gi
+        configmaps: "10"
+        gold.storageclass.storage.k8s.io/requests.storage: "0"
+        persistentvolumeclaims: "3"
+        requests.storage: 5Gi
+        secrets: "30"
+        services: "5"
+        silver.storageclass.storage.k8s.io/persistentvolumeclaims: "3"
+        silver.storageclass.storage.k8s.io/requests.storage: 1Gi
 - action: append
   key: objects
   value:
