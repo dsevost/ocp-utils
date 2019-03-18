@@ -71,10 +71,10 @@ sed "
   s/sdn\./${SDN_DOMAIN}./g ;
   s/\.internal\.net/.$INTERNAL_DOMAIN/g ;
   s/\.customer\.tld/.$CUSTOMER_TLD/g ;
-  s/ROOT_CA\.crt/$CA_CERT/g ;
+  s|ROOT_CA\.crt|$CA_CERT|g ;
   s/__IDM_NAME__/$IDM_NAME/g ;
   s/__IDM_BIND_PASSWORD__/$IDM_BIND_PASSWORD/g ;
-  s/IDM_CA\.crt/$IDM_CA_CERT/g ;
+  s|IDM_CA\.crt|$IDM_CA_CERT|g ;
   s/ocp-proxy/$IDM_BIND_USER/g ;
   s/ocp-users/$IDM_GROUP/g ;
   s/__DC__/$IDM_DC/g ;
@@ -86,14 +86,14 @@ sed "
   s/bronze\.storageclass/${BRONZE_STORAGE_CLASS}.storageclass/g ;
   s/iron\.storageclass/${IRON_STORAGE_CLASS}.storageclass/g ;
   /^# .*[^=].*/d ;
-" $DIR/$f > ${ASSETS}/$(echo $f | sed 's/\.template//')
+" $DIR/$f > ${ASSETS}/$(echo $f | sed 's|\.template||')
 done
 
 #for f in {gluster,hawkular,logging,prometheus}-inline.yaml.template ; do
 #    cat $DIR/$f >> ${ASSETS}/$(echo $TMPL_NAME | sed 's/\.template//')
 #done
 
-ln -sf ${ASSETS}/$(echo $TMPL_NAME | sed 's/\.template//') ${CUR_DIR}/hosts
+ln -sf ${ASSETS}/$(echo $TMPL_NAME | sed 's|\.template||') ${CUR_DIR}/hosts
 
 export CA_ROOT=${CA_ASSETS} OCSP_HOSTNAME=${IDM_HOST}
 cat $DIR/openssl-fragment.cfg.template | envsubst | sed 's/__DOLLAR__/$/g' > ${CA_ASSETS}/openssl-${ROOT_CA}.cnf
