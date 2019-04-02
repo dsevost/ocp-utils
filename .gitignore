@@ -3,6 +3,7 @@ env.sh
 env.sh-*
 hosts
 bin/manage-ssl.sh
+bin/env
 conf/json
 conf/old
 openshift
