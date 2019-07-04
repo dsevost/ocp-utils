@@ -11,7 +11,7 @@ KEY_TYPE=${KEY_TYPE:-"rsa:2048"}
 
 shift
 for n in $* ; do
-    grep '^[0-9\.]\{7,15\}' && ALT_NAMES="${ALT_NAMES},IP:${n}" || ALT_NAMES="${ALT_NAMES},DNS:${n}"
+    echo $n | grep -q '^[0-9\.]\{7,15\}' && ALT_NAMES="${ALT_NAMES},IP:${n}" || ALT_NAMES="${ALT_NAMES},DNS:${n}"
 done
 
 if [ "$ALT_NAMES" = "" ] ; then
