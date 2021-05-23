@@ -133,13 +133,13 @@ osm_project_request_template=default/project-request
 openshift_project_request_template_edits={{ lookup("file", "/root/project-request-fragment.yaml") | from_yaml }}
 
 # Конфигурация развертывания Gluster
-#{{ lookup("file", "/root/gluster-fragment.yaml") | from_yaml }}
+# insert content of "/root/gluster-fragment.yaml" here
 
 # Конфигурация развертывания EFK
-#{{ lookup("file", "/root/logging-fragment.yaml") | from_yaml }}
+# insert content of "/root/logging-fragment.yaml" here
 
 # Конфигурация развертывания Hawkular
-#{{ lookup("file", "/root/hawkular-fragment.yaml") | from_yaml }}
+# insert content of "/root/hawkular-fragment.yaml") here
 
 # Конфигурация развертывания Prometheus
-#{{ lookup("file", "/root/prometheus-fragment.yaml") | from_yaml }}
+# insert content of "/root/prometheus-fragment.yaml") here
